@@ -1,0 +1,65 @@
+<link rel="stylesheet" href="https://cdn.rawgit.com/lfcms/LittlefootCMS/development/lf/system/lib/lf.css">
+<script>
+
+function generateFoxNewsSearchUrl(query, min_date, max_date, start = 0)
+{
+	// eg, http://www.foxnews.com/search-results/search?q=obama&ss=fn&min_date=2012-06-09&max_date=2012-06-09&start=0
+	var url = 'http://www.foxnews.com/search-results/search?q='+query+'&ss=fn&min_date='+min_date+'&max_date='+max_date+'&start='+start;
+	
+	console.log(url);
+		
+	return url;
+}
+
+
+function updateIframes(event)
+{
+	console.log("DATE CHANGED");
+	
+	if(event != null){
+		
+		var selectedDate;
+		
+		//check for browser compatibility
+		if(event.target){
+			//firefox, safari
+			//console.log(event.target.id + ' has fired the event!');
+			//console.log(event.target.value + ' is teh value event!');
+			selectedDate = event.target.value
+		} else {
+			//IE
+			//console.log(event.srcElement.id + ' has fired the event!');
+			//console.log(event.srcElement.value + ' value!');
+			selectedDate = event.srcElement.value
+		}
+		
+		// get date 8 years ago to compare
+		// TODO: care about handling 2018
+		var eightYearsAgo = '2009'+selectedDate.substring(4);
+		console.log("8 years ago was");
+		console.log(eightYearsAgo);
+		console.log("now its");
+		console.log(selectedDate);
+		
+		var obamaUrl = generateFoxNewsSearchUrl('obama', eightYearsAgo, eightYearsAgo);
+		var trumpUrl = generateFoxNewsSearchUrl('trump', selectedDate, selectedDate);
+			
+		document.getElementById("obamaIframe").src = obamaUrl;
+		document.getElementById("trumpIframe").src = trumpUrl;
+	}
+}
+
+</script>
+
+<input onChange="updateIframes(event)" id="dateSelection" type="date">
+
+<div class="row">
+	<div class="col-6">
+		<h2>Obama</h2>
+		<iframe id="obamaIframe" width="100%" height="800px" src="" frameborder="0"></iframe>
+	</div>
+	<div class="col-6">
+		<h2>Trump</h2>
+		<iframe id="trumpIframe" width="100%" height="800px" src="" frameborder="0"></iframe>
+	</div>
+</div>
